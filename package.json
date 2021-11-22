@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/OtavioPiza/tododoro/issues"
   },
-  "homepage": "https://github.com/OtavioPiza/tododoro#readme"
+  "homepage": "https://github.com/OtavioPiza/tododoro#readme",
+  "devDependencies": {
+    "eslint": "^8.3.0",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1"
+  }
 }
