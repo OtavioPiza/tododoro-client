@@ -1,0 +1,19 @@
+{
+  "name": "tododoro-api",
+  "version": "1.0.0",
+  "description": "API for the TodoDoro application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OtavioPiza/tododoro.git"
+  },
+  "author": "Otavio Sartorelli de Toledo Piza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OtavioPiza/tododoro/issues"
+  },
+  "homepage": "https://github.com/OtavioPiza/tododoro#readme"
+}
