@@ -1,2 +1,8 @@
+# folders
+
 node_modules/
 .idea/
+
+# config files
+
+.env
