@@ -17,9 +17,14 @@ const moment = require('moment');
 const patternMatcher = require('../utils/patternMatcher');
 const jwt = require('../utils/jwt');
 
+/* middleware */
+
+const tokenVerifier = require('../middleware/tokenVerifier');
+
 /* models */
 
 const User = require('../models/user');
+const {sendVerificationCode} = require('../utils/mailer');
 
 /* setup */
 
@@ -64,11 +69,17 @@ authRouter.post('/register', async (request, response) => {
     passwordHash,
   });
 
-  // save
+  try {
 
-  try {                                 // try to save
+    // save
+
     const res = await user.save();
     response.status(201).send({ token: jwt.signToken(res.username, res.email, res._id) });
+
+    // send verification email
+
+    const res2 = await sendVerificationCode(res.email, res.verification.code);
+    console.log(res2);
 
   } catch (e) {                         // email and username are not unique
 
@@ -77,7 +88,9 @@ authRouter.post('/register', async (request, response) => {
     }
     throw (e);
   }
-  
+
+
+
 });
 
 /**
@@ -118,6 +131,11 @@ authRouter.post('/login', async (request, response) => {
 });
 
 /**
+ * verifies if the user has a valid token
+ */
+authRouter.use('/verify', tokenVerifier);
+
+/**
  * verifies a user
  */
 authRouter.post('/verify', async (request, response) => {
@@ -154,6 +172,13 @@ authRouter.post('/verify', async (request, response) => {
   });
 
   response.status(200).end();
+});
+
+/**
+ * resends email with verification code
+ */
+authRouter.post('/verify/resend', async (request, response) => {
+  response.status(500).end();
 });
 
 /* exports */

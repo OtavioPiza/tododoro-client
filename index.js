@@ -5,15 +5,15 @@
  * @author Otavio Sartorelli de Toledo Piza
  */
 
-/* imports */
-
-const http = require('http');
-const app = require('./app');
-
 /* config */
 
 const config = require('./config/config'); // access env vars
 require('./config/mongodb');
+
+/* imports */
+
+const http = require('http');
+const app = require('./app');
 
 /* utils imports */
 
