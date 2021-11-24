@@ -95,7 +95,7 @@ authRouter.post('/login', async (request, response) => {
 
   // get user
 
-  const user = (await User.where({username: body.username}))[0];
+  const user = await User.findOne().where({username: body.username});
 
   if (!user) {
     response.status(401).send({ error: 'wrong username or password'});
@@ -117,8 +117,43 @@ authRouter.post('/login', async (request, response) => {
   response.status(200).send({ token });
 });
 
+/**
+ * verifies a user
+ */
 authRouter.post('/verify', async (request, response) => {
-  
+  const token = request.get('authorization');
+  const body = request.body;
+
+  if (!token || !jwt.verifyToken(token)) {
+    response.status(403).end();
+    return;
+  }
+
+  const decToken = jwt.decode(token);
+  const user = await User.findById(decToken.id);
+
+  if (!body || !('code' in body)) {
+    response.status(400).end();
+    return;
+  }
+
+  if (body.code !== user.verification.code) {
+    response.status(403).send({ error: 'invalid code' });
+    return;
+  }
+
+  if (moment(new Date()).isAfter(user.verification.expires)) {
+    response.status(403).send({ error: 'code expired' });
+    return;
+  }
+
+  await User.findByIdAndUpdate(decToken.id, {
+    verification: {
+      verified: true
+    }
+  });
+
+  response.status(200).end();
 });
 
 /* exports */

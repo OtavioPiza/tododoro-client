@@ -28,9 +28,16 @@ const signToken = (username, email, id) => {
  * @param token
  * @returns {*}
  */
-const verifyToken = (token) => (
-  jwt.verify(token, config.SECRET)
-);
+const verifyToken = (token) => {
+
+  try {
+    return jwt.verify(token, config.SECRET);
+
+  } catch (e) {
+    return false;
+  }
+
+};
 
 /**
  * decodes a token
