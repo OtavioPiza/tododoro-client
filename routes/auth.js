@@ -25,6 +25,7 @@ const tokenVerifier = require('../middleware/tokenVerifier');
 
 const User = require('../models/user');
 const {sendVerificationCode} = require('../utils/mailer');
+const logger = require('../utils/logger');
 
 /* setup */
 
@@ -139,15 +140,8 @@ authRouter.use('/verify', tokenVerifier);
  * verifies a user
  */
 authRouter.post('/verify', async (request, response) => {
-  const token = request.get('authorization');
+  const decToken = jwt.decode(request.get('authorization'));
   const body = request.body;
-
-  if (!token || !jwt.verifyToken(token)) {
-    response.status(403).end();
-    return;
-  }
-
-  const decToken = jwt.decode(token);
   const user = await User.findById(decToken.id);
 
   if (!body || !('code' in body)) {
@@ -178,6 +172,28 @@ authRouter.post('/verify', async (request, response) => {
  * resends email with verification code
  */
 authRouter.post('/verify/resend', async (request, response) => {
+  const decToken = jwt.decode(request.get('authorization'));
+
+  const user = await User.findByIdAndUpdate(decToken.id, {
+    verification: {
+      code: crypt.randomInt(99999999).toString().padStart(8, '0'),
+      expires: moment(new Date()).add(12, 'hours'),
+      verified: false
+    }
+  });
+
+  if (!user) {
+    response.status(401).send({ error: 'this user does not exist' });
+    return;
+  }
+
+  const res = await sendVerificationCode(user.email, user.verification.code);
+
+  if ('accepted' in res && res.accepted) {
+    response.status(201).end();
+    return;
+  }
+
   response.status(500).end();
 });
 

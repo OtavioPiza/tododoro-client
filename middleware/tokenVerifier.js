@@ -19,7 +19,7 @@ const tokenVerifier = (request, response, next) => {
   const token = request.get('authorization');
 
   if (!token || !jwt.verifyToken(token)) {
-    response.status(403).end();
+    response.status(401).end();
     return;
   }
   next();
