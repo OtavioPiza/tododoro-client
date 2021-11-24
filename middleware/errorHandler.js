@@ -17,7 +17,7 @@ const logger = require('../utils/logger');
  * @param next
  */
 const defaultErrorHandler = (error, request, response, next) => {
-  logger.error(error.message);
+  logger.error(error);
   response.status(500).end();
   next();
 };

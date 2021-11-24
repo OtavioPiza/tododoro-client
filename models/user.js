@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   verification: {
-    code: Number,
+    code: String,
     expires: Date,
     verified: Boolean
   }
