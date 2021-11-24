@@ -87,10 +87,6 @@ const sendVerificationCode = async (to, code) => {
   return await send(to, null, null, 'Verify your new TodoDoro account', emailBody, null);
 };
 
-send('otaviopiza27@gmail.com', null, null, 'feliz aniversarion', 'iai cara feliz aniversarion', null).then(res => {
-  console.log(res);
-});
-
 /* exports */
 
 module.exports = {
