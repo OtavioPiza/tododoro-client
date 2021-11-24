@@ -36,7 +36,7 @@ authRouter.post('/register', async (request, response) => {
 
   // verify if body contains necessary info
 
-  if (!body || !('email' in body || 'firstName' in body || 'lastName' in body || 'username' in body || 'password' in body)) {
+  if (!body || !('email' in body && 'firstName' in body && 'lastName' in body && 'username' in body && 'password' in body)) {
     response.status(400).send({ error: 'content-missing' });
     return;
   }
@@ -68,7 +68,7 @@ authRouter.post('/register', async (request, response) => {
 
   try {                                 // try to save
     const res = await user.save();
-    response.status(200).send(jwt.signToken(res.username, res.email, res._id));
+    response.status(201).send({ token: jwt.signToken(res.username, res.email, res._id) });
 
   } catch (e) {                         // email and username are not unique
 
@@ -78,6 +78,43 @@ authRouter.post('/register', async (request, response) => {
     throw (e);
   }
   
+});
+
+/**
+ * logs a user in
+ */
+authRouter.post('/login', async (request, response) => {
+  const body = request.body;
+
+  // verify request
+
+  if (!body || !('username' in body && 'password' in body)) {
+    response.status(400).send({ error: 'content missing '});
+    return;
+  }
+
+  // get user
+
+  const user = (await User.where({username: body.username}))[0];
+
+  if (!user) {
+    response.status(401).send({ error: 'wrong username or password'});
+    return;
+  }
+
+  // verify password
+
+  const valid = await bcrypt.compare(body.password, user.passwordHash);
+
+  if (!valid) {
+    response.status(401).send({ error: 'wrong username or password' });
+    return;
+  }
+
+  // generate and return token
+
+  const token = jwt.signToken(user.username, user.email, user._id);
+  response.status(200).send({ token });
 });
 
 module.exports = authRouter;
