@@ -19,17 +19,12 @@ const unknownEndpoint = require('./middleware/unknownEndpoint');
 
 const authRouter = require('./routes/auth');  // execute mongo setup
 
-/* config */
-
-require('./config/config');   // execute config
-require('./config/mongodb');
-
 /* setup express */
 
 const app = express();    // express server
 
-app.use(cors);            // support for cross env requests
-app.use(express.json);    // json parser
+app.use(cors());            // support for cross env requests
+app.use(express.json());    // json parser
 
 /* routes */
 

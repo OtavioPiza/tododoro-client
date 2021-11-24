@@ -58,12 +58,11 @@ authRouter.post('/register', async (request, response) => {
   });
   
   try {
-    const res = await user.save();
-    logger.info(res);
+    await user.save();
     response.status(201).end();
 
   } catch (e) {
-    logger.error(e);
+    response.status(400).send({ error: 'email and username have to be unique' });
   }
   
 });
