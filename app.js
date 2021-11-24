@@ -9,28 +9,20 @@
 
 const cors = require('cors');           // cross origin requests
 const express = require('express');     // express
-const mongoose = require('mongoose');   // mongoose
+
+/* middleware */
+
+const requestLogger = require('./middleware/requestLogger');
+const unknownEndpoint = require('./middleware/unknownEndpoint');
+
+/* router imports */
+
+const authRouter = require('./routes/auth');  // execute mongo setup
 
 /* config */
 
-const config = require('util/config');
-
-/* utils */
-
-const logger = require('utils/logger');
-
-/* setup database */
-
-logger.info(`connecting to ${config.MONGODB_URI}`);
-
-mongoose.connect(config.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}, (error) => {
-  error ? logger.error(error) : logger.info('connected to mongo');
-});
+require('./config/config');   // execute config
+require('./config/mongodb');
 
 /* setup express */
 
@@ -38,6 +30,14 @@ const app = express();    // express server
 
 app.use(cors);            // support for cross env requests
 app.use(express.json);    // json parser
+
+/* routes */
+
+app.use(requestLogger);
+
+app.use('/api/auth', authRouter);
+
+app.use(unknownEndpoint);
 
 /* export */
 

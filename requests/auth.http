@@ -1,0 +1,14 @@
+# create user
+
+POST http://localhost:3000/api/auth/resgister
+Content-Type: application/json
+
+{
+  "firstName": "Otavio",
+  "lastName": "Piza",
+  "username": "OtavioPiza",
+  "email": "otaviostpiza@gmail.com",
+  "password": "test"
+}
+
+###

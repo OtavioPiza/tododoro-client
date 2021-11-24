@@ -12,7 +12,7 @@ const app = require('./app');
 
 /* utils imports */
 
-const config = require('./utils/config'); // access env vars
+const config = require('./config/config'); // access env vars
 const logger = require('./utils/logger'); // log info
 
 /* create http server */
