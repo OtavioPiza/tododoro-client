@@ -13,8 +13,8 @@ const config = require('../config/config');
 // fill client id and client secret
 
 const oAuth = new google.auth.OAuth2(
-  '',
-  '',
+  '377525267557-ous157vpt3p00bbpe52dufm54gestri8.apps.googleusercontent.com',
+  config.CLIENT_SECRET,
   config.REDIRECT_URI
 );
 oAuth.setCredentials({ refresh_token: config.REFRESH_TOKEN });
@@ -43,8 +43,8 @@ const send = async (to, cc, bcc, subject, text, html) => {
       auth: {
         type: 'oauth2',
         user: 'tododorotimer@gmail.com',
-        clientId: '',
-        clientSecret: '',
+        clientId: '377525267557-ous157vpt3p00bbpe52dufm54gestri8.apps.googleusercontent.com',
+        clientSecret: config.CLIENT_SECRET,
         refreshToken: config.REFRESH_TOKEN,
         accessToken: oAuth.getAccessToken()
       }
