@@ -117,4 +117,10 @@ authRouter.post('/login', async (request, response) => {
   response.status(200).send({ token });
 });
 
+authRouter.post('/verify', async (request, response) => {
+  
+});
+
+/* exports */
+
 module.exports = authRouter;
