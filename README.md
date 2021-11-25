@@ -7,7 +7,8 @@
 ├── /auth
 │   ├── /login
 │   ├── /register
-│   └── /verify
+│   ├── /verify
+│   └── /verify/resend
 ├── /tasks
 │   ├── /:name
 │   ├── 

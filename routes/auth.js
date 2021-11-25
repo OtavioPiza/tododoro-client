@@ -16,6 +16,7 @@ const moment = require('moment');
 
 const patternMatcher = require('../utils/patternMatcher');
 const jwt = require('../utils/jwt');
+const {sendVerificationCode} = require('../utils/mailer');
 
 /* middleware */
 
@@ -24,8 +25,6 @@ const tokenVerifier = require('../middleware/tokenVerifier');
 /* models */
 
 const User = require('../models/user');
-const {sendVerificationCode} = require('../utils/mailer');
-const logger = require('../utils/logger');
 
 /* setup */
 
@@ -173,10 +172,11 @@ authRouter.post('/verify', async (request, response) => {
  */
 authRouter.post('/verify/resend', async (request, response) => {
   const decToken = jwt.decode(request.get('authorization'));
+  const code = crypt.randomInt(99999999).toString().padStart(8, '0');
 
   const user = await User.findByIdAndUpdate(decToken.id, {
     verification: {
-      code: crypt.randomInt(99999999).toString().padStart(8, '0'),
+      code: code,
       expires: moment(new Date()).add(12, 'hours'),
       verified: false
     }
@@ -187,7 +187,7 @@ authRouter.post('/verify/resend', async (request, response) => {
     return;
   }
 
-  const res = await sendVerificationCode(user.email, user.verification.code);
+  const res = await sendVerificationCode(user.email, code);
 
   if ('accepted' in res && res.accepted) {
     response.status(201).end();
