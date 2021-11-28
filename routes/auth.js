@@ -42,14 +42,14 @@ authRouter.post('/register', async (request, response) => {
   // verify if body contains necessary info
 
   if (!body || !('email' in body && 'firstName' in body && 'lastName' in body && 'username' in body && 'password' in body)) {
-    response.status(400).send({ error: 'content-missing' });
+    response.status(400).send({ error: 'content missing' });
     return;
   }
 
   // verify valid email
 
   if (!patternMatcher.isEmailValid(body.email)) {
-    response.status(401).send({ error: 'invalid email' });
+    response.status(400).send({ error: 'invalid email' });
     return;
   }
 
@@ -127,7 +127,11 @@ authRouter.post('/login', async (request, response) => {
   // generate and return token
 
   const token = jwt.signToken(user.username, user.email, user._id);
-  response.status(200).send({ token });
+  response.status(200).send({
+    username: user.username,
+    verified: user.verification.verified,
+    token
+  });
 });
 
 /**
