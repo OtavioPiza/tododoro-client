@@ -28,6 +28,8 @@ const authRouter = require('./routes/auth');  // execute mongo setup
 
 const app = express();    // express server
 
+app.use(express.static('build'));
+
 /* routes and middleware */
 
 /**
