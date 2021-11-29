@@ -26,6 +26,12 @@ const taskRouter = express.Router();
 
 taskRouter.use(tokenVerifier);
 
+taskRouter.get('/', async (request, response) => {
+  const token =  jwt.decode(request.get('authorization'));
+  response.status(200).send(await Task.find({ user: token.id }));
+});
+
+
 taskRouter.post('/', async (request, response) => {
   const body = request.body;
 
@@ -88,6 +94,7 @@ taskRouter.delete('/', async (request, response) => {
   }
   response.status(204).end();
 });
+
 
 // == exports == //
 
