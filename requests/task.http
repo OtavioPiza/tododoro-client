@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/task
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik90YXZpb1BpemEiLCJlbWFpbCI6Im90YXZpb3BpemEyN0BnbWFpbC5jb20iLCJpZCI6IjYxOWU5MWExODI4ODBiMzczZTZhYTYwMiIsImlhdCI6MTYzNzc4OTI3OX0.ib-dZluMxy_5sKNAq1CHIRvlOf8IXsl9SXjA3Cyco2Q
+
+{
+  "title": "test"
+}
+
+###
+
+DELETE http://localhost:3001/api/task
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik90YXZpb1BpemEiLCJlbWFpbCI6Im90YXZpb3BpemEyN0BnbWFpbC5jb20iLCJpZCI6IjYxOWU5MWExODI4ODBiMzczZTZhYTYwMiIsImlhdCI6MTYzNzc4OTI3OX0.ib-dZluMxy_5sKNAq1CHIRvlOf8IXsl9SXjA3Cyco2Q
+
+{
+  "id": "61a41b7a8dasfsf03834decb165b"
+}

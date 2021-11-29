@@ -22,7 +22,8 @@ const errorHandler = require('./middleware/errorHandler');
 
 /* router imports */
 
-const authRouter = require('./routes/auth');  // execute mongo setup
+const authRouter = require('./routes/auth');
+const taskRouter = require('./routes/task');  // execute mongo setup
 
 /* setup express */
 
@@ -51,6 +52,8 @@ app.use(requestLogger);
  * auth routers
  */
 app.use('/api/auth', authRouter);
+
+app.use('/api/task', taskRouter);
 
 /**
  * provides 404 page if route is not found
