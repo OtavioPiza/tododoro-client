@@ -30,7 +30,7 @@ const path = require('path');  // execute mongo setup
 
 const app = express();    // express server
 
-app.use(express.static('build'));
+app.use(express.static('../client/build'));
 
 /* routes and middleware */
 
@@ -63,7 +63,7 @@ app.use('/api/task', taskRouter);
  * default route
  */
 app.get('*', (request, response) => {
-  response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  response.sendFile(path.resolve('../client/build/index.html'));
 });
 
 /**
