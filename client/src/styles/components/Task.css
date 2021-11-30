@@ -1,0 +1,63 @@
+#task {
+    width: min(30rem, 80vw);
+    height: auto;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 0 15px #dbe3eb;
+}
+
+#task #container  {
+    margin: 0;
+    padding: 5%;
+    width: 100%;
+}
+
+#task #container #titleButton {
+    background-color: #f4476b;
+    border-radius: 1rem;
+    color: #f1f7fc;
+    border: none;
+    max-width: 100%;
+}
+
+#task #container #titleButton:hover {
+    background-color: #f55e7e;
+}
+
+#task #container #titleButton #titleContainer {
+    display: flex;
+    align-items: center;
+}
+
+#task #container #titleButton #titleContainer h5 {
+    margin-bottom: 0;
+    margin-left: .7rem;
+    margin-right: .2rem;
+}
+
+#task #container #titleButton #titleContainer #bar {
+    margin-bottom: 0;
+}
+
+#task #container #delButton {
+    float: right;
+    background: none;
+    color: #646464;
+    border-radius: 100%;
+    border: none;
+}
+
+#task #container #delButton:hover {
+    color: #818181;
+}
+
+#task #container p {
+    padding: .8rem .8rem 0 .8rem;
+    margin-bottom: 0;
+    color: #646464;
+}
+
+#alertDiv {
+    width: min(30rem, 80vw);
+}
