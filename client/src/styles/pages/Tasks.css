@@ -1,0 +1,57 @@
+#create {
+    width: min(30rem, 80vw);
+    height: auto;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 0 15px #dbe3eb;
+
+}
+
+#create #container  {
+    padding: 5%;
+    width: 90%;
+}
+
+#create #container #in {
+    margin-top: 15px;
+}
+
+#create #buttonHolder {
+    display: flex;
+    margin-top: 1rem;
+    color: #f4476b;
+}
+
+#create #button {
+    background-color: #f4476b;
+    margin-right: 5%;
+    border-radius: 1rem;
+    border: none;
+    color: #f1f7fc;
+}
+
+#create #button:hover {
+    background-color: #f55e7e;
+}
+
+#breakBar {
+    color: #f4476b;
+}
+
+#genButton {
+    background-color: #f4476b;
+    margin-right: 5%;
+    border-radius: 1rem;
+    border: none;
+    color: #f1f7fc;
+}
+
+#genButton:hover {
+    background-color: #f55e7e;
+}
+
+#alertDiv {
+    width: min(30rem, 80vw);
+}
+
