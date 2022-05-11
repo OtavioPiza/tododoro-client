@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Form, Row} from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import '../styles/pages/Tasks.css';
 import AuthContext from '../context/AuthContext';
-import {Navigate} from 'react-router';
-import {doCreateNote, doRemoveNote, getNotes} from '../services/api';
-import {Alert, Box, CircularProgress, LinearProgress, Modal, Snackbar, Typography} from '@mui/material';
+import { Navigate } from 'react-router';
+import { doCreateNote, doRemoveNote, getNotes } from '../services/api';
+import { Alert, Box, CircularProgress, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
 import Task from '../components/Task';
 import ReactHowler from 'react-howler';
 import notification from '../sounds/notification.mp3';
@@ -25,13 +25,14 @@ const Tasks = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingTaks, setLoadingTaks] = useState(false);
 
   const [task, setTask] = useState(null);
   const [TaskProgress, setTaskProgress] = useState(0);
   const [breakTask, setBreakTask] = useState(null);
   const [breakProgress, setBreakProgress] = useState(0);
   const [completed, setCompleted] = useState(null);
-  const [cycle, setCycle] =  useState(1);
+  const [cycle, setCycle] = useState(1);
 
   const [audio, setAudio] = useState(false);
   const [alert, setAlert] = useState('');
@@ -40,14 +41,17 @@ const Tasks = () => {
   /* hooks */
 
   useEffect(() => {
+    setLoadingTaks(true);
 
     getNotes(authContext.token)
       .then(res => {
         setTasks(res.data);
+        setLoadingTaks(false);
       })
       .catch((e) => {
         console.log(e);
         setAlert('Something went wrong while fetching your tasks');
+        setLoadingTaks(false);
       });
   }, []);
 
@@ -185,9 +189,10 @@ const Tasks = () => {
   /* return tasks */
 
   return (
+    <Row id={'main'}>
+      {loadingTaks && <LinearProgress id={'lp'} color={'inherit'} />}
 
-    <Row>
-      <Col/>
+      <Col />
       <Col xs={'auto'}>
 
         {
@@ -235,7 +240,7 @@ const Tasks = () => {
                   Create
                 </Button>
 
-                {loading && <CircularProgress color={'inherit'}/>}
+                {loading && <CircularProgress color={'inherit'} />}
 
               </div>
 
@@ -261,7 +266,7 @@ const Tasks = () => {
         </div>
 
       </Col>
-      <Col/>
+      <Col />
 
       <Modal
         open={!!breakTask}
@@ -286,13 +291,13 @@ const Tasks = () => {
             {'You have been working hard; take some to chill and recharge. We will notify you when it\'s time to get back to work.'}
           </Typography>
 
-          <br/>
+          <br />
 
           <div id={'breakBar'}>
             <LinearProgress variant={'determinate'} color={'inherit'} value={breakProgress} />
           </div>
 
-          <br/>
+          <br />
 
           <div>
 
@@ -326,7 +331,7 @@ const Tasks = () => {
             {`Did you complete the task you have been working on${currentTaskTitle(completed)}?`}
           </Typography>
 
-          <br/>
+          <br />
 
           <Button
             style={{

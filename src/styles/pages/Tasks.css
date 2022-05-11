@@ -8,7 +8,7 @@
 
 }
 
-#create #container  {
+#create #container {
     padding: 5%;
     width: 90%;
 }
@@ -20,6 +20,10 @@
 #create #buttonHolder {
     display: flex;
     margin-top: 1rem;
+    color: #f4476b;
+}
+
+#lp {
     color: #f4476b;
 }
 
@@ -54,4 +58,3 @@
 #alertDiv {
     width: min(30rem, 80vw);
 }
-
