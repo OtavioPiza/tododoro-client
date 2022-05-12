@@ -8,10 +8,13 @@ const Protect = ({ children }) => {
   const authContext = useContext(AuthContext);
   const logContext = useContext(LogContext);
 
-  if (!authContext.token) {
-    useEffect(() => {
+  useEffect(() => {
+    if (!authContext.token) {
       logContext.setError('You must be logged in to view this page.');
-    }, []);
+    }
+  }, []);
+
+  if (!authContext.token) {
     return <Navigate to="/login" />;
 
   } else {
