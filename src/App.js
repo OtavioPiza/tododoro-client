@@ -1,45 +1,48 @@
-import React from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import {AuthContextProvider} from './context/AuthContext';
+import React, { useEffect, useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Verify from './pages/Verify';
 import Tasks from './pages/Tasks';
+import AuthContext from './context/AuthContext';
+import Protect from './components/Protect';
 
 const App = () => {
+  const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    authContext.check();
+  }, [authContext.token]);
+
   return (
-
-    <AuthContextProvider>
-
-      <NavBar/>
+    <>
+      <NavBar />
 
       <Router>
 
         <Routes>
 
           <Route path={'/login'} element={
-            <Login/>
-          }/>
+            <Login />
+          } />
 
           <Route path={'/register'} element={
-            <Register/>
-          }/>
+            <Register />
+          } />
 
           <Route path={'/verify'} element={
-            <Verify/>
-          }/>
+            <Protect><Verify /></Protect>
+          } />
 
           <Route path={'/tasks'} element={
-            <Tasks/>
-          }/>
+            <Protect><Tasks /></Protect>
+          } />
 
         </Routes>
 
       </Router>
-
-    </AuthContextProvider>
-
+    </>
   );
 };
 
