@@ -190,7 +190,9 @@ const Tasks = () => {
 
   return (
     <Row id={'main'}>
-      {loadingTaks && <LinearProgress id={'lp'} color={'inherit'} />}
+      {loadingTaks 
+        ? <LinearProgress id={'lp'} color={'inherit'} />
+        : <span id={'lp'}></span>}
 
       <Col />
       <Col xs={'auto'}>
