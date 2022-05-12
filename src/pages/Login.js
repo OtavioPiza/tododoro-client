@@ -113,7 +113,7 @@ const Login = () => {
             severity={'error'}
             sx={{
               borderRadius: '1rem',
-              marginTop: '5px',
+              marginTop: '15px',
               maxWidth: '100%'
             }}
           >{logContext.error}</Alert>}
