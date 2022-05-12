@@ -39,6 +39,22 @@ const doRegister = async (email, firstName, lastName, username, password) => {
 };
 
 /**
+ * Checks if the token the user is holding is valid
+ * 
+ * @param {String} token token provided by the api
+ * @returns 
+ */
+const doCheck = async (token) => {
+  const response = await axios.post(`${authBaseUrl}/check`, null, {
+    headers: {
+      Authorization: token
+    }
+  });
+
+  return { status: response.status, data: response.data };
+};
+
+/**
  * tries to verify a user with the api
  *
  * @param token token
@@ -144,6 +160,7 @@ const doRemoveNote = async (token, id) => {
 export {
   doRegister,
   doVerify,
+  doCheck,
   doResendVerify,
   doLogin,
   getNotes,

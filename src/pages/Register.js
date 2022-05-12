@@ -11,10 +11,6 @@ const Register = () => {
 
   const authContext = useContext(AuthContext);
 
-  authContext.token = authContext.token ? authContext.token : null;
-  authContext.verified = authContext.verified ? authContext.verified : null;
-  authContext.username = authContext.username ? authContext.username : null;
-
   /* states */
 
   const [loading, setLoading] = useState(false);

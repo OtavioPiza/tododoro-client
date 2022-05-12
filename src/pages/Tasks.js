@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import '../styles/pages/Tasks.css';
 import AuthContext from '../context/AuthContext';
-import { Navigate } from 'react-router';
 import { doCreateNote, doRemoveNote, getNotes } from '../services/api';
 import { Alert, Box, CircularProgress, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
 import Task from '../components/Task';
@@ -14,10 +13,6 @@ const Tasks = () => {
   /* context */
 
   const authContext = useContext(AuthContext);
-
-  authContext.token = authContext.token ? authContext.token : null;
-  authContext.verified = authContext.verified ? authContext.verified : null;
-  authContext.username = authContext.username ? authContext.username : null;
 
   /* state */
 
@@ -171,20 +166,6 @@ const Tasks = () => {
       }
     }
   };
-
-  /* redirect if not authenticated */
-
-  if (!authContext.token) {
-    return (
-      <Navigate to={'/login'} />
-    );
-  }
-
-  if (authContext.token && !authContext.verified) {
-    return (
-      <Navigate to={'/verify'} />
-    );
-  }
 
   /* return tasks */
 

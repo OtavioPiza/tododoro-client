@@ -11,10 +11,6 @@ const Login = () => {
 
   const authContext = useContext(AuthContext);
 
-  authContext.token = authContext.token ? authContext.token : null;
-  authContext.verified = authContext.verified ? authContext.verified : null;
-  authContext.username = authContext.username ? authContext.username : null;
-
   /* states */
 
   const [loading, setLoading] = useState(false);
@@ -62,12 +58,6 @@ const Login = () => {
   if (authContext.token && authContext.verified) {
     return (
       <Navigate to={'/tasks'} />
-    );
-  }
-
-  if (!authContext.token) {
-    return (
-      <Navigate to={'/login'} />
     );
   }
 

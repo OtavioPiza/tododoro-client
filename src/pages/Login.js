@@ -5,23 +5,20 @@ import {Alert, CircularProgress} from '@mui/material';
 import AuthContext from '../context/AuthContext';
 import {Navigate} from 'react-router';
 import {useStateIfMounted} from 'use-state-if-mounted';
+import LogContext from '../context/LogContext';
 
 const Login = () => {
 
   /* context */
 
   const authContext = useContext(AuthContext);
-
-  authContext.token = authContext.token ? authContext.token : null;
-  authContext.verified = authContext.verified ? authContext.verified : null;
-  authContext.username = authContext.username ? authContext.username : null;
+  const logContext = useContext(LogContext);
 
   /* states */
 
   const [loading, setLoading] = useStateIfMounted(false);
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  const [alert, setAlert] = useState('');
 
   /* handlers */
 
@@ -38,15 +35,11 @@ const Login = () => {
     } catch (e) {
 
       if (e.response.status === 401) {
-        setAlert('Invalid username or password');
+        logContext.setError('Invalid username or password');
 
       } else {
-        setAlert('Something went wrong when connecting to our servers. We have been notified and are currently working on it. Hang thight!');
+        logContext.setError('Something went wrong when connecting to our servers. We have been notified and are currently working on it. Hang thight!');
       }
-
-      setTimeout(() => {
-        setAlert('');
-      }, 5000);
     }
     setLoading(false);
   };
@@ -113,17 +106,17 @@ const Login = () => {
 
         <div id={'alertDiv'}>
 
-          {alert && <Alert
+          {logContext.error && <Alert
             id={'alert'}
-            open={alert && true}
-            onClose={() => setAlert('')}
+            open={logContext.error && true}
+            onClose={() => logContext.setError('')}
             severity={'error'}
             sx={{
               borderRadius: '1rem',
               marginTop: '5px',
               maxWidth: '100%'
             }}
-          >{alert}</Alert>}
+          >{logContext.error}</Alert>}
 
         </div>
 
