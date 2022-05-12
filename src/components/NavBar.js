@@ -12,10 +12,6 @@ const NavBar = () => {
 
   const authContext = useContext(AuthContext);
 
-  authContext.token = authContext.token ? authContext.token : null;
-  authContext.verified = authContext.verified ? authContext.verified : null;
-  authContext.username = authContext.username ? authContext.username : null;
-
   /* return */
 
   return (
@@ -36,7 +32,7 @@ const NavBar = () => {
               </Col>
 
               <Col md={'auto'}>
-                <Nav.Link href={'/'}>Tasks</Nav.Link>
+                <Nav.Link href={'/tasks'}>Tasks</Nav.Link>
               </Col>
 
               {authContext.token && authContext.username && <Col md={'auto'}>
