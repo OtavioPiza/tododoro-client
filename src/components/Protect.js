@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AuthContext from '../context/AuthContext';
 import LogContext from '../context/LogContext';
@@ -9,7 +9,9 @@ const Protect = ({ children }) => {
   const logContext = useContext(LogContext);
 
   if (!authContext.token) {
-    logContext.setError('You must be logged in to view this page.');
+    useEffect(() => {
+      logContext.setError('You must be logged in to view this page.');
+    }, []);
     return <Navigate to="/login" />;
 
   } else {
