@@ -1,6 +1,6 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {doLogin, doRegister, doVerify} from '../services/api';
+import { doLogin, doRegister, doVerify, doCheck } from '../services/api';
 
 // == constants == //
 
@@ -31,10 +31,11 @@ try {
  * @type {React.Context<{logout: logout, verify: verify, login: login, register: register}>}
  */
 const AuthContext = createContext({
-  register: () => {},
-  verify: () => {},
-  login: () => {},
-  logout: () => {},
+  register: () => { },
+  verify: () => { },
+  login: () => { },
+  logout: () => { },
+  check: () => { },
   token: () => false,
   verified: () => false,
   username: () => false
@@ -107,7 +108,7 @@ const AuthContextProvider = ({ children }) => {
       return;
     }
 
-    const res = await  doVerify(auth.token, code);
+    const res = await doVerify(auth.token, code);
 
     if (res.status === 200) {
       setAuth({
@@ -126,7 +127,7 @@ const AuthContextProvider = ({ children }) => {
   const login = async (username, password) => {
 
     if (!username || !password) {
-      throw ({ response: { status: 401 }});
+      throw ({ response: { status: 401 } });
     }
 
     const res = await doLogin(username, password);
@@ -152,6 +153,25 @@ const AuthContextProvider = ({ children }) => {
     });
   };
 
+  /**
+   * checks validity of the current token
+   */
+  const check = () => {
+    if (!auth.token) {
+      return;
+    }
+
+    doCheck(auth.token)
+      .then(() => { })
+      .catch(() => {
+        setAuth({
+          token: null,
+          verified: null,
+          username: null,
+        });
+      });
+  };
+
   /* return */
 
   return (
@@ -160,6 +180,7 @@ const AuthContextProvider = ({ children }) => {
       verify,
       login,
       logout,
+      check,
       token: auth.token,
       verified: auth.verified,
       username: auth.username
