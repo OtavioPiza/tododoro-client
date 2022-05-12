@@ -75,6 +75,10 @@ const Login = () => {
                 One last step!
               </h3>
 
+              <p>
+                Enter the code sent to your email to verify your account and get started.
+              </p>
+
               <Form.Group className="mb-3" controlId="password" id={'in'}>
                 <Form.Control
                   placeholder="Code"
