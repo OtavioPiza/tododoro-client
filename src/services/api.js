@@ -131,10 +131,12 @@ const getNotes = async (token) => {
  * @param description
  * @returns {Promise<{data: any, status: number}>}
  */
-const doCreateNote = async (token, title, description) => {
+const doCreateNote = async (token, title, description, due = undefined, priority = undefined) => {
   const response = await axios.post(`${taskBaseUrl}`, {
     title,
     description,
+    priority,
+    due,
   }, {
     headers: {
       'Authorization': token

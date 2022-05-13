@@ -58,6 +58,11 @@
     color: #646464;
 }
 
+#task #container small {
+    margin-bottom: 0;
+    color: #646464;
+}
+
 #alertDiv {
     width: min(30rem, 80vw);
 }

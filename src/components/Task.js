@@ -1,13 +1,15 @@
 import React from 'react';
-import {Button, Card, Container} from 'react-bootstrap';
-import {CircularProgress} from '@mui/material';
+import { Button, Card, Container } from 'react-bootstrap';
+import { CircularProgress } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import '../styles/components/Task.css';
 
-const Task = ({ startHandler, deleteHandler, id, title, description, progress }) => {
+const Task = ({ startHandler, deleteHandler, id, title, description, progress, due }) => {
 
   /* context */
+
+  const dueDate = new Date(due);
 
   return (
     <Card id={'task'} >
@@ -22,7 +24,7 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress })
 
               <CircularProgress color={'inherit'} variant="determinate" value={progress} id={'bar'} sx={{
                 padding: '.2rem'
-              }}/>
+              }} />
 
               <h5>
                 {title}
@@ -38,9 +40,18 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress })
 
         </div>
 
-        { description && <p>
+        {description && <p>
           {description}
         </p>}
+
+        {
+          due && <p>
+            <small sytle={{
+            }}>
+              Due: {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString()}
+            </small>
+          </p>
+        }
 
       </Container>
 
@@ -54,7 +65,8 @@ Task.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
-  progress: PropTypes.number
+  progress: PropTypes.number,
+  due: PropTypes.any
 };
 
 export default Task;

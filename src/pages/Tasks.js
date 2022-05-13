@@ -4,6 +4,10 @@ import '../styles/pages/Tasks.css';
 import AuthContext from '../context/AuthContext';
 import { doCreateNote, doRemoveNote, getNotes } from '../services/api';
 import { Alert, Box, CircularProgress, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Task from '../components/Task';
 import ReactHowler from 'react-howler';
 import notification from '../sounds/notification.mp3';
@@ -19,6 +23,9 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [date, setDate] = useState(null);
+  const [priority, setPriority] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [loadingTaks, setLoadingTaks] = useState(false);
 
@@ -125,14 +132,20 @@ const Tasks = () => {
     setLoading(true);
 
     try {
-      const res = await doCreateNote(authContext.token, title, description ? description : null);
+      const res = await doCreateNote(authContext.token, title, description ? description : null,
+        date ? new Date(date) : null, priority ? priority : null);
+
       setTasks(tasks.concat({
         id: res.data.id,
         title: res.data.title,
         description: res.data.description,
+        due: res.data.due,
+        priority: res.data.priority,
       }));
       setTitle('');
       setDescription('');
+      setDate(null);
+      setPriority(null);
       setSnack('Task created');
 
     } catch (e) {
@@ -171,7 +184,7 @@ const Tasks = () => {
 
   return (
     <Row id={'main'}>
-      {loadingTaks 
+      {loadingTaks
         ? <LinearProgress id={'lp'} color={'inherit'} />
         : <span id={'lp'}></span>}
 
@@ -188,6 +201,7 @@ const Tasks = () => {
               title={t.title}
               description={t.description}
               progress={task && t.id === task ? TaskProgress : 100}
+              due={t.due}
             />
           ))
         }
@@ -206,6 +220,7 @@ const Tasks = () => {
                   placeholder={'Enter a title'}
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
+                  required
                 />
               </Form.Group>
 
@@ -215,6 +230,24 @@ const Tasks = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
                 />
+              </Form.Group>
+
+              <Form.Group controlId="date" id={'in'} style={{
+                width: '100%',
+              }}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    id={'indate'}
+                    renderInput={(props) => <TextField {...props} style={{
+                      width: '100%',
+                    }} />}
+                    label="Choose a due date (optional)"
+                    value={date}
+                    onChange={(newValue) => {
+                      setDate(newValue);
+                    }}
+                  />
+                </LocalizationProvider>
               </Form.Group>
 
               <div id={'buttonHolder'}>

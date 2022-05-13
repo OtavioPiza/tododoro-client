@@ -28,6 +28,10 @@
     height: 2px;
 }
 
+#create #container #indate {
+    margin-top: 15px;
+}
+
 #create #button {
     background-color: #f4476b;
     margin-right: 5%;
