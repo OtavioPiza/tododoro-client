@@ -104,6 +104,7 @@ const CreateTask = ({ tasks, setTasks }) => {
               onChange={(e) => setDescription(e.target.value)}
               label="Description"
               value={description}
+              multiline
             />
           </Form.Group>
 
