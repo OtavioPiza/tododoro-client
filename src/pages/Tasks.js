@@ -8,6 +8,10 @@ import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import Task from '../components/Task';
 import ReactHowler from 'react-howler';
 import notification from '../sounds/notification.mp3';
@@ -157,18 +161,20 @@ const Tasks = () => {
   };
 
   const removeTask = async (id) => {
+    setLoadingTaks(true);
 
     try {
       await doRemoveNote(authContext.token, id);
       setTasks(tasks.filter((task) => task.id !== id));
       setSnack('Task removed');
+      setLoadingTaks(false);
 
     } catch (e) {
       console.log(e.error);
       setAlert('Something went wrong while deleting the task');
+      setLoadingTaks(false);
       setTimeout(() => setAlert(''), 5000);
     }
-
   };
 
   const currentTaskTitle = (id) => {
@@ -215,8 +221,15 @@ const Tasks = () => {
                 Create a new task!
               </h4>
 
-              <Form.Group controlId={'title'} id={'in'}>
-                <Form.Control
+              <Form.Group controlId={'title'} id={'in'} >
+
+                <TextField
+                  style={{
+                    width: '100%',
+                  }}
+                  id="outlined-password-input"
+                  label="Title"
+                  autoComplete="current-password"
                   placeholder={'Enter a title'}
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
@@ -225,11 +238,36 @@ const Tasks = () => {
               </Form.Group>
 
               <Form.Group controlId="description" id={'in'}>
-                <Form.Control
+
+                <TextField
+                  style={{
+                    width: '100%',
+                  }}
+                  id="outlined-password-input"
                   placeholder={'Enter a description (optional)'}
                   onChange={(e) => setDescription(e.target.value)}
+                  label="Description"
                   value={description}
                 />
+              </Form.Group>
+
+              <Form.Group controlId="description" id={'in'}>
+                <FormControl fullWidth>
+                  <InputLabel>Priority</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={priority}
+                    label="Priority"
+                    onChange={(e) => setPriority(e.target.value)}
+                  >
+                    <MenuItem value={null}>None</MenuItem>
+                    <MenuItem value={0}>Low</MenuItem>
+                    <MenuItem value={1}>Normal</MenuItem>
+                    <MenuItem value={2}>High</MenuItem>
+                    <MenuItem value={3}>Urgent</MenuItem>
+                  </Select>
+                </FormControl>
               </Form.Group>
 
               <Form.Group controlId="date" id={'in'} style={{
@@ -241,7 +279,7 @@ const Tasks = () => {
                     renderInput={(props) => <TextField {...props} style={{
                       width: '100%',
                     }} />}
-                    label="Choose a due date (optional)"
+                    label="Due"
                     value={date}
                     onChange={(newValue) => {
                       setDate(newValue);
