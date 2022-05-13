@@ -159,6 +159,7 @@ const Tasks = () => {
               description={t.description}
               progress={task && t.id === task ? TaskProgress : 100}
               due={t.due}
+              priority={t.priority}
             />
           ))
         }

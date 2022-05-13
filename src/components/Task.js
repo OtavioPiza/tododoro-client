@@ -5,11 +5,18 @@ import PropTypes from 'prop-types';
 
 import '../styles/components/Task.css';
 
-const Task = ({ startHandler, deleteHandler, id, title, description, progress, due }) => {
+const Task = ({ startHandler, deleteHandler, id, title, description, progress, due, priority }) => {
 
   /* context */
 
   const dueDate = new Date(due);
+  const priorityString = priority == 3
+    ? 'URGENT'
+    : priority === 2
+      ? 'HIGH'
+      : priority === 1
+        ? 'NORMAL'
+        : priority === 0 ? 'LOW' : null;
 
   return (
     <Card id={'task'} >
@@ -48,7 +55,7 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress, d
           due && <p>
             <small sytle={{
             }}>
-              Due: {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString()}
+              <b>{priorityString ? priorityString : ''}</b> Due: {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </small>
           </p>
         }
@@ -66,7 +73,8 @@ Task.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   progress: PropTypes.number,
-  due: PropTypes.any
+  due: PropTypes.any,
+  priority: PropTypes.number
 };
 
 export default Task;
