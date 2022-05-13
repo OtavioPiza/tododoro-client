@@ -1,36 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import '../styles/pages/Tasks.css';
-import AuthContext from '../context/AuthContext';
-import { doCreateNote, doRemoveNote, getNotes } from '../services/api';
-import { Alert, Box, CircularProgress, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import { doRemoveNote, getNotes } from '../services/api';
+import { Alert, Box, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
 import Task from '../components/Task';
 import ReactHowler from 'react-howler';
 import notification from '../sounds/notification.mp3';
+
+import AuthContext from '../context/AuthContext';
+import LogContext from '../context/LogContext';
+import CreateTask from '../components/CreateTask';
 
 const Tasks = () => {
 
   /* context */
 
   const authContext = useContext(AuthContext);
+  const logContext = useContext(LogContext);
 
   /* state */
 
   const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(null);
-  const [priority, setPriority] = useState(null);
-
-  const [loading, setLoading] = useState(false);
   const [loadingTaks, setLoadingTaks] = useState(false);
 
   const [task, setTask] = useState(null);
@@ -41,8 +31,6 @@ const Tasks = () => {
   const [cycle, setCycle] = useState(1);
 
   const [audio, setAudio] = useState(false);
-  const [alert, setAlert] = useState('');
-  const [snack, setSnack] = useState('');
 
   /* hooks */
 
@@ -56,7 +44,7 @@ const Tasks = () => {
       })
       .catch((e) => {
         console.log(e);
-        setAlert('Something went wrong while fetching your tasks');
+        logContext.setError('Something went wrong while fetching your tasks');
         setLoadingTaks(false);
       });
   }, []);
@@ -125,55 +113,18 @@ const Tasks = () => {
     setCompleted(id);
   };
 
-  const createTask = async () => {
-
-    if (!title) {
-      setAlert('Please enter a title');
-      setTimeout(() => setAlert(''), 5000);
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await doCreateNote(authContext.token, title, description ? description : null,
-        date ? new Date(date) : null, priority ? priority : null);
-
-      setTasks(tasks.concat({
-        id: res.data.id,
-        title: res.data.title,
-        description: res.data.description,
-        due: res.data.due,
-        priority: res.data.priority,
-      }));
-      setTitle('');
-      setDescription('');
-      setDate(null);
-      setPriority(null);
-      setSnack('Task created');
-
-    } catch (e) {
-      console.log(e);
-      setAlert('Something went wrong while creating a new task');
-      setTimeout(() => setAlert(''), 5000);
-    }
-    setLoading(false);
-  };
-
   const removeTask = async (id) => {
     setLoadingTaks(true);
 
     try {
       await doRemoveNote(authContext.token, id);
       setTasks(tasks.filter((task) => task.id !== id));
-      setSnack('Task removed');
+      logContext.setInfo('Task removed');
       setLoadingTaks(false);
 
     } catch (e) {
-      console.log(e.error);
-      setAlert('Something went wrong while deleting the task');
+      logContext.setError('Something went wrong while deleting the task');
       setLoadingTaks(false);
-      setTimeout(() => setAlert(''), 5000);
     }
   };
 
@@ -212,110 +163,20 @@ const Tasks = () => {
           ))
         }
 
-        <Card id={'create'} >
-
-          <Container id={'container'}>
-            <Form>
-
-              <h4>
-                Create a new task!
-              </h4>
-
-              <Form.Group controlId={'title'} id={'in'} >
-
-                <TextField
-                  style={{
-                    width: '100%',
-                  }}
-                  id="outlined-password-input"
-                  label="Title"
-                  autoComplete="current-password"
-                  placeholder={'Enter a title'}
-                  onChange={(e) => setTitle(e.target.value)}
-                  value={title}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group controlId="description" id={'in'}>
-
-                <TextField
-                  style={{
-                    width: '100%',
-                  }}
-                  id="outlined-password-input"
-                  placeholder={'Enter a description (optional)'}
-                  onChange={(e) => setDescription(e.target.value)}
-                  label="Description"
-                  value={description}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="description" id={'in'}>
-                <FormControl fullWidth>
-                  <InputLabel>Priority</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={priority}
-                    label="Priority"
-                    onChange={(e) => setPriority(e.target.value)}
-                  >
-                    <MenuItem value={null}>None</MenuItem>
-                    <MenuItem value={0}>Low</MenuItem>
-                    <MenuItem value={1}>Normal</MenuItem>
-                    <MenuItem value={2}>High</MenuItem>
-                    <MenuItem value={3}>Urgent</MenuItem>
-                  </Select>
-                </FormControl>
-              </Form.Group>
-
-              <Form.Group controlId="date" id={'in'} style={{
-                width: '100%',
-              }}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DateTimePicker
-                    id={'indate'}
-                    renderInput={(props) => <TextField {...props} style={{
-                      width: '100%',
-                    }} />}
-                    label="Due"
-                    value={date}
-                    onChange={(newValue) => {
-                      setDate(newValue);
-                    }}
-                  />
-                </LocalizationProvider>
-              </Form.Group>
-
-              <div id={'buttonHolder'}>
-
-                <Button id={'button'} variant="danger" onClick={createTask}>
-                  Create
-                </Button>
-
-                {loading && <CircularProgress color={'inherit'} />}
-
-              </div>
-
-            </Form>
-          </Container>
-
-        </Card>
+        <CreateTask tasks={tasks} setTasks={setTasks} />
 
         <div id={'alertDiv'}>
 
-          {alert && <Alert
+          {logContext.error && <Alert
             id={'alert'}
-            open={alert && true}
-            onClose={() => setAlert('')}
+            open={!!logContext.error}
             severity={'error'}
             sx={{
               borderRadius: '1rem',
               marginTop: '5px',
               maxWidth: '100%'
             }}
-          >{alert}</Alert>}
+          >{logContext.error}</Alert>}
 
         </div>
 
@@ -415,10 +276,9 @@ const Tasks = () => {
       </Modal>
 
       <Snackbar
-        open={!!snack}
+        open={!!logContext.info}
         autoHideDuration={5000}
-        onClose={() => setSnack('')}
-        message={snack}
+        message={logContext.info}
       />
 
       <ReactHowler preload={true} playing={audio} onEnd={() => setAudio(false)} src={notification} />
