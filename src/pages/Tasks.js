@@ -128,6 +128,10 @@ const Tasks = () => {
     }
   };
 
+  const editTask = async (id) => {
+    
+  };
+
   const currentTaskTitle = (id) => {
 
     for (const task of tasks) {
@@ -154,6 +158,7 @@ const Tasks = () => {
               key={i}
               startHandler={startTask}
               deleteHandler={removeTask}
+              editHandler={editTask}
               id={t.id}
               title={t.title}
               description={t.description}

@@ -7,7 +7,7 @@
     box-shadow: 0 0 15px #dbe3eb;
 }
 
-#task #container  {
+#task #container {
     margin: 0;
     padding: 5%;
     width: 100%;
@@ -38,6 +38,14 @@
 
 #task #container #titleButton #titleContainer #bar {
     margin-bottom: 0;
+}
+
+#task #container #editButton {
+    float: right;
+    background: none;
+    color: #646464;
+    border-radius: 100%;
+    border: none;
 }
 
 #task #container #delButton {

@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 
 import '../styles/components/Task.css';
 
-const Task = ({ startHandler, deleteHandler, id, title, description, progress, due, priority }) => {
+const Task = ({ startHandler, deleteHandler, editHandler,
+  id, title, description, progress, due, priority }) => {
 
   /* context */
 
@@ -45,6 +46,10 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress, d
             X
           </button>
 
+          <button id='editButton' onClick={() => editHandler(id)} >
+            E
+          </button>
+
         </div>
 
         {description && <p>
@@ -55,7 +60,7 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress, d
           (due || priority) && <p>
             <small sytle={{
             }}>
-              <b>{priorityString ? priorityString : ''}</b> { due ? `Due: ${dueDate.toLocaleDateString()} at ${dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+              <b>{priorityString ? priorityString : ''}</b> {due ? `Due: ${dueDate.toLocaleDateString()} at ${dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
             </small>
           </p>
         }
@@ -69,6 +74,7 @@ const Task = ({ startHandler, deleteHandler, id, title, description, progress, d
 Task.propTypes = {
   startHandler: PropTypes.func.isRequired,
   deleteHandler: PropTypes.func.isRequired,
+  editHandler: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
