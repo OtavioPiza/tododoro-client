@@ -19,6 +19,8 @@ const Task = ({ startHandler, deleteHandler, editHandler,
         ? 'NORMAL'
         : priority === 0 ? 'LOW' : null;
 
+  const parts = description.split('\n');
+
   return (
     <Card id={'task'} >
 
@@ -53,7 +55,14 @@ const Task = ({ startHandler, deleteHandler, editHandler,
         </div>
 
         {description && <p>
-          {description}
+          {parts.map((part, i) => {
+            if (i == parts.length() - 1) {
+              return <>{part}</>;
+            }
+            return (
+              <>{part} <br /></>
+            );
+          })}
         </p>}
 
         {

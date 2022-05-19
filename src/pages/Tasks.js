@@ -129,7 +129,7 @@ const Tasks = () => {
   };
 
   const editTask = async (id) => {
-    
+    console.log(id);
   };
 
   const currentTaskTitle = (id) => {
