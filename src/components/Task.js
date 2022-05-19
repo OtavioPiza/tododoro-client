@@ -66,12 +66,16 @@ const Task = ({ startHandler, deleteHandler, editHandler,
         </p>}
 
         {
-          (due || priority) && <p>
-            <small sytle={{
-            }}>
-              <b>{priorityString ? priorityString : ''}</b> {due ? `Due: ${dueDate.toLocaleDateString()} at ${dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
-            </small>
-          </p>
+          (due || priority)
+            ?
+            <p>
+              <small sytle={{
+              }}>
+                <b>{priorityString ? priorityString : ''}</b> {due ? `Due: ${dueDate.toLocaleDateString()} at ${dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+              </small>
+            </p>
+            :
+            <></>
         }
 
       </Container>
