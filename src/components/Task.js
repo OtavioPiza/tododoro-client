@@ -56,7 +56,7 @@ const Task = ({ startHandler, deleteHandler, editHandler,
 
         {description && <p>
           {parts.map((part, i) => {
-            if (i == parts.length() - 1) {
+            if (i == parts.length - 1) {
               return <>{part}</>;
             }
             return (
