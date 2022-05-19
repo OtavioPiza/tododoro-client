@@ -47,6 +47,8 @@ const CreateTask = ({ tasks, setTasks }) => {
       const res = await doCreateNote(authContext.token, title, description ? description : null,
         date ? new Date(date) : null, priority ? priority : null);
 
+      console.log(res);
+
       setTasks(tasks.concat({
         id: res.data.id,
         title: res.data.title,
