@@ -11,8 +11,9 @@ import { CircularProgress, TextField, Select, FormControl, MenuItem, InputLabel 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { doUpdateNote } from '../services/api';
 
-const EditTask = ({ task, setTasks }) => {
+const EditTask = ({ task, tasks, setTasks, setEdit }) => {
 
   /* context */
 
@@ -20,8 +21,6 @@ const EditTask = ({ task, setTasks }) => {
   const logContext = useContext(LogContext);
 
   /* state */
-
-  console.log(task);
 
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
@@ -34,7 +33,7 @@ const EditTask = ({ task, setTasks }) => {
   /**
    * creates a task
    */
-  const createTask = async () => {
+  const update = async () => {
 
     if (!title) {
       logContext.setError('Please enter a title');
@@ -42,6 +41,25 @@ const EditTask = ({ task, setTasks }) => {
     }
 
     setLoading(true);
+
+    try {
+      await doUpdateNote(authContext.token, task.id, title, description ? description : null,
+        date ? new Date(date) : null, priority ? priority : null);
+
+      setTasks(tasks.map(t => t.id === task.id ? {
+        ...task,
+        title,
+        description,
+        due: date,
+        priority: priority == -1 ? null : priority,
+      } : t));
+      setEdit(false);
+      logContext.setInfo('Task updated');
+
+    } catch (e) {
+      console.error(e);
+      logContext.setError('Failed to update task');
+    }
 
     setLoading(false);
   };
@@ -134,8 +152,8 @@ const EditTask = ({ task, setTasks }) => {
 
           <div id={'buttonHolder'}>
 
-            <Button id={'button'} variant="danger" onClick={createTask}>
-              Create
+            <Button id={'button'} variant="danger" onClick={update}>
+              Update
             </Button>
 
             {loading && <CircularProgress color={'inherit'} />}
@@ -150,7 +168,9 @@ const EditTask = ({ task, setTasks }) => {
 
 EditTask.propTypes = {
   task: PropTypes.any,
+  tasks: PropTypes.array,
   setTasks: PropTypes.func,
+  setEdit: PropTypes.func,
 };
 
 export default EditTask;

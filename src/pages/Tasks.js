@@ -289,7 +289,7 @@ const Tasks = () => {
         onClose={() => () => setEdit(false)}
       >
         <div id='edit'>
-          <EditTask task={edit}/>
+          <EditTask task={edit} tasks={tasks} setTasks={setTasks} setEdit={setEdit} />
         </div>
       </Modal>
 

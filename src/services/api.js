@@ -157,6 +157,21 @@ const doRemoveNote = async (token, id) => {
   return { status: response.status, data: response.data };
 };
 
+const doUpdateNote = async (token, id, title, description, due = undefined, priority = undefined) => {
+  const response = await axios.put(`${taskBaseUrl}`, {
+    title,
+    description,
+    priority,
+    due,
+    id,
+  }, {
+    headers: {
+      'Authorization': token
+    }
+  });
+  return { status: response.status, data: response.data };
+};
+
 /* exports */
 
 export {
@@ -168,4 +183,5 @@ export {
   getNotes,
   doCreateNote,
   doRemoveNote,
+  doUpdateNote,
 };
