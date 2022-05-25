@@ -4,17 +4,15 @@ import PropTypes from 'prop-types';
 import AuthContext from '../context/AuthContext';
 import LogContext from '../context/LogContext';
 
-import { doCreateNote } from '../services/api';
-
 import '../styles/pages/Tasks.css';
 
-import { Button, Card, Container, Form } from 'react-bootstrap';
+import { Button, Container, Form, Card } from 'react-bootstrap';
 import { CircularProgress, TextField, Select, FormControl, MenuItem, InputLabel } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
-const CreateTask = ({ tasks, setTasks }) => {
+const EditTask = ({ task, setTasks }) => {
 
   /* context */
 
@@ -23,10 +21,12 @@ const CreateTask = ({ tasks, setTasks }) => {
 
   /* state */
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(null);
-  const [priority, setPriority] = useState('');
+  console.log(task);
+
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description);
+  const [date, setDate] = useState(task.due);
+  const [priority, setPriority] = useState(task.priority);
   const [loading, setLoading] = useState(false);
 
   /* handlers */
@@ -43,40 +43,25 @@ const CreateTask = ({ tasks, setTasks }) => {
 
     setLoading(true);
 
-    try {
-      const res = await doCreateNote(authContext.token, title, description ? description : null,
-        date ? new Date(date) : null, priority ? priority : null);
-
-      console.log(res);
-
-      setTasks(tasks.concat({
-        id: res.data.id,
-        title: res.data.title,
-        description: res.data.description,
-        due: res.data.due,
-        priority: res.data.priority == -1 ? null : res.data.priority,
-      }));
-      setTitle('');
-      setDescription('');
-      setDate(null);
-      setPriority(null);
-      logContext.setInfo('Task created');
-
-    } catch (e) {
-      logContext.setError('Something went wrong while creating a new task');
-    }
-
     setLoading(false);
   };
 
   return (
-    <Card id={'create'} >
-
+    <Card id={'create'} style={{
+      borderRadius: '1rem',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 'min(400px, 80%)',
+      p: 4,
+      padding: '1.5rem 0',
+    }}>
       <Container id={'container'}>
         <Form>
 
           <h4>
-            Create a new task!
+            Edit Your Task
           </h4>
 
           <Form.Group controlId={'title'} id={'in'} >
@@ -159,14 +144,13 @@ const CreateTask = ({ tasks, setTasks }) => {
 
         </Form>
       </Container>
-
     </Card>
   );
 };
 
-CreateTask.propTypes = {
-  tasks: PropTypes.array,
+EditTask.propTypes = {
+  task: PropTypes.any,
   setTasks: PropTypes.func,
 };
 
-export default CreateTask;
+export default EditTask;

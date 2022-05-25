@@ -10,6 +10,7 @@ import notification from '../sounds/notification.mp3';
 import AuthContext from '../context/AuthContext';
 import LogContext from '../context/LogContext';
 import CreateTask from '../components/CreateTask';
+import EditTask from '../components/EditTask';
 
 const Tasks = () => {
 
@@ -22,6 +23,7 @@ const Tasks = () => {
 
   const [tasks, setTasks] = useState([]);
   const [loadingTaks, setLoadingTaks] = useState(false);
+  const [edit, setEdit] = useState(null);
 
   const [task, setTask] = useState(null);
   const [TaskProgress, setTaskProgress] = useState(0);
@@ -129,7 +131,8 @@ const Tasks = () => {
   };
 
   const editTask = async (id) => {
-    console.log(id);
+    const task = tasks.find((task) => task.id === id);
+    setEdit(task);
   };
 
   const currentTaskTitle = (id) => {
@@ -199,7 +202,7 @@ const Tasks = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
+          width: 'min(400px, 80%)',
           bgcolor: 'background.paper',
           border: 'none',
           boxShadow: 24,
@@ -239,7 +242,7 @@ const Tasks = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
+          width: 'min(400px, 80%)',
           bgcolor: 'background.paper',
           border: 'none',
           boxShadow: 24,
@@ -279,6 +282,15 @@ const Tasks = () => {
             No! Keep it there.</Button>
 
         </Box>
+      </Modal>
+
+      <Modal
+        open={!!edit}
+        onClose={() => () => setEdit(false)}
+      >
+        <div id='edit'>
+          <EditTask task={edit}/>
+        </div>
       </Modal>
 
       <Snackbar
