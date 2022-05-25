@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Card, Container } from 'react-bootstrap';
 import { CircularProgress } from '@mui/material';
+import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 
 import '../styles/components/Task.css';
@@ -54,16 +55,8 @@ const Task = ({ startHandler, deleteHandler, editHandler,
 
         </div>
 
-        {description && <p>
-          {parts.map((part, i) => {
-            if (i == parts.length - 1) {
-              return <>{part}</>;
-            }
-            return (
-              <>{part} <br /></>
-            );
-          })}
-        </p>}
+        
+        { description && <ReactMarkdown>{description}</ReactMarkdown>}
 
         {
           (due || priority)
