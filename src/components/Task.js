@@ -20,8 +20,6 @@ const Task = ({ startHandler, deleteHandler, editHandler,
         ? 'NORMAL'
         : priority === 0 ? 'LOW' : null;
 
-  const parts = description.split('\n');
-
   return (
     <Card id={'task'} >
 
