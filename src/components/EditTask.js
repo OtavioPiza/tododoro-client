@@ -156,6 +156,10 @@ const EditTask = ({ task, tasks, setTasks, setEdit }) => {
               Update
             </Button>
 
+            <Button id={'button'} variant="danger" onClick={() => setEdit(null)}>
+              Cancel
+            </Button>
+
             {loading && <CircularProgress color={'inherit'} />}
 
           </div>
