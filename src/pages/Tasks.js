@@ -11,6 +11,7 @@ import AuthContext from '../context/AuthContext';
 import LogContext from '../context/LogContext';
 import CreateTask from '../components/CreateTask';
 import EditTask from '../components/EditTask';
+import Sort from '../components/Sort';
 
 const Tasks = () => {
 
@@ -153,7 +154,12 @@ const Tasks = () => {
         : <span id={'lp'}></span>}
 
       <Col />
+
       <Col xs={'auto'}>
+
+        {
+          tasks.length >= 2 && <Sort />
+        }
 
         {
           tasks.sort((a, b) => {
