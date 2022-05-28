@@ -123,11 +123,11 @@ const EditTask = ({ task, tasks, setTasks, setEdit }) => {
                 label="Priority"
                 onChange={(e) => setPriority(e.target.value)}
               >
-                <MenuItem value={-1}>None</MenuItem>
-                <MenuItem value={0}>Low</MenuItem>
-                <MenuItem value={1}>Normal</MenuItem>
-                <MenuItem value={2}>High</MenuItem>
-                <MenuItem value={3}>Urgent</MenuItem>
+                <MenuItem value={0}>None</MenuItem>
+                <MenuItem value={1}>Low</MenuItem>
+                <MenuItem value={2}>Normal</MenuItem>
+                <MenuItem value={3}>High</MenuItem>
+                <MenuItem value={4}>Urgent</MenuItem>
               </Select>
             </FormControl>
           </Form.Group>

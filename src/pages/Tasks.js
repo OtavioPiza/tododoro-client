@@ -156,7 +156,9 @@ const Tasks = () => {
       <Col xs={'auto'}>
 
         {
-          tasks.map((t, i) => (
+          tasks.sort((a, b) => {
+            return b.priority - a.priority;
+          }).map((t, i) => (
             <Task
               key={i}
               startHandler={startTask}

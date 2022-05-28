@@ -12,13 +12,13 @@ const Task = ({ startHandler, deleteHandler, editHandler,
   /* context */
 
   const dueDate = new Date(due);
-  const priorityString = priority == 3
+  const priorityString = priority == 4
     ? 'URGENT'
-    : priority === 2
+    : priority === 3
       ? 'HIGH'
-      : priority === 1
+      : priority === 2
         ? 'NORMAL'
-        : priority === 0 ? 'LOW' : null;
+        : priority === 1 ? 'LOW' : null;
 
   return (
     <Card id={'task'} >
@@ -53,8 +53,8 @@ const Task = ({ startHandler, deleteHandler, editHandler,
 
         </div>
 
-        
-        { description && <ReactMarkdown>{description}</ReactMarkdown>}
+
+        {description && <ReactMarkdown>{description}</ReactMarkdown>}
 
         {
           (due || priority)
