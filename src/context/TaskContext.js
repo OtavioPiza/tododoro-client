@@ -74,7 +74,7 @@ const TaskContextProvider = ({ children }) => {
         return new Date(a.due) - new Date(b.due);
       }
       else {
-        return a.id - b.id;
+        return new Date(a.created) - new Date(b.created);
       }
 
     }));
