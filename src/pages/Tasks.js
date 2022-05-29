@@ -131,8 +131,6 @@ const Tasks = () => {
 
   /* return tasks */
 
-  console.log(taskContext.tasks);
-
   return (
     <Row id={'main'}>
       {taskContext.loadingTasks
