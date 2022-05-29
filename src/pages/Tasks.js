@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import '../styles/pages/Tasks.css';
-import { doRemoveNote, getNotes } from '../services/api';
+import { doRemoveNote } from '../services/api';
 import { Alert, Box, LinearProgress, Modal, Snackbar, Typography } from '@mui/material';
 import Task from '../components/Task';
 import ReactHowler from 'react-howler';
@@ -9,6 +9,8 @@ import notification from '../sounds/notification.mp3';
 
 import AuthContext from '../context/AuthContext';
 import LogContext from '../context/LogContext';
+import TaskContext from '../context/TaskContext';
+
 import CreateTask from '../components/CreateTask';
 import EditTask from '../components/EditTask';
 import Sort from '../components/Sort';
@@ -19,13 +21,11 @@ const Tasks = () => {
 
   const authContext = useContext(AuthContext);
   const logContext = useContext(LogContext);
+  const taskContext = useContext(TaskContext);
 
   /* state */
 
-  const [tasks, setTasks] = useState([]);
-  const [loadingTaks, setLoadingTaks] = useState(false);
   const [edit, setEdit] = useState(null);
-
   const [task, setTask] = useState(null);
   const [TaskProgress, setTaskProgress] = useState(0);
   const [breakTask, setBreakTask] = useState(null);
@@ -35,22 +35,6 @@ const Tasks = () => {
 
   const [audio, setAudio] = useState(false);
 
-  /* hooks */
-
-  useEffect(() => {
-    setLoadingTaks(true);
-
-    getNotes(authContext.token)
-      .then(res => {
-        setTasks(res.data);
-        setLoadingTaks(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        logContext.setError('Something went wrong while fetching your tasks');
-        setLoadingTaks(false);
-      });
-  }, []);
 
   if (task && !completed) {
     setTimeout(() => {
@@ -117,28 +101,28 @@ const Tasks = () => {
   };
 
   const removeTask = async (id) => {
-    setLoadingTaks(true);
+    taskContext.setLoadingTasks(true);
 
     try {
       await doRemoveNote(authContext.token, id);
-      setTasks(tasks.filter((task) => task.id !== id));
+      taskContext.setTasks(taskContext.tasks.filter((task) => task.id !== id));
       logContext.setInfo('Task removed');
-      setLoadingTaks(false);
+      taskContext.setLoadingTasks(false);
 
     } catch (e) {
       logContext.setError('Something went wrong while deleting the task');
-      setLoadingTaks(false);
+      taskContext.setLoadingTasks(false);
     }
   };
 
   const editTask = async (id) => {
-    const task = tasks.find((task) => task.id === id);
+    const task = taskContext.tasks.find((task) => task.id === id);
     setEdit(task);
   };
 
   const currentTaskTitle = (id) => {
 
-    for (const task of tasks) {
+    for (const task of taskContext.tasks) {
       if (task.id === id) {
         return ` (${task.title})`;
       }
@@ -147,9 +131,11 @@ const Tasks = () => {
 
   /* return tasks */
 
+  console.log(taskContext.tasks);
+
   return (
     <Row id={'main'}>
-      {loadingTaks
+      {taskContext.loadingTasks
         ? <LinearProgress id={'lp'} color={'inherit'} />
         : <span id={'lp'}></span>}
 
@@ -158,29 +144,29 @@ const Tasks = () => {
       <Col xs={'auto'}>
 
         {
-          tasks.length >= 2 && <Sort />
+          taskContext.tasks.length >= 2 && <Sort setSort={taskContext.setSort} sort={taskContext.sort} />
         }
 
         {
-          tasks.sort((a, b) => {
-            return b.priority - a.priority;
-          }).map((t, i) => (
-            <Task
-              key={i}
-              startHandler={startTask}
-              deleteHandler={removeTask}
-              editHandler={editTask}
-              id={t.id}
-              title={t.title}
-              description={t.description}
-              progress={task && t.id === task ? TaskProgress : 100}
-              due={t.due}
-              priority={t.priority}
-            />
-          ))
+          taskContext.tasks.map((t, i) => {
+            return (
+              <Task
+                key={i}
+                startHandler={startTask}
+                deleteHandler={removeTask}
+                editHandler={editTask}
+                id={t.id}
+                title={t.title}
+                description={t.description}
+                progress={task && t.id === task ? TaskProgress : 100}
+                due={t.due}
+                priority={t.priority}
+              />
+            );
+          })
         }
 
-        <CreateTask tasks={tasks} setTasks={setTasks} />
+        <CreateTask tasks={taskContext.tasks} setTasks={taskContext.setTasks} />
 
         <div id={'alertDiv'}>
 
@@ -297,7 +283,7 @@ const Tasks = () => {
         onClose={() => () => setEdit(false)}
       >
         <div id='edit'>
-          <EditTask task={edit} tasks={tasks} setTasks={setTasks} setEdit={setEdit} />
+          <EditTask task={edit} tasks={taskContext.tasks} setTasks={taskContext.setTasks} setEdit={setEdit} />
         </div>
       </Modal>
 
